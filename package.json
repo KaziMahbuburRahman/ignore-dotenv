@@ -2,7 +2,7 @@
   "name": "ignore-dotenv",
   "displayName": "Ignore DotENV",
   "description": "Automatically adds .env to .gitignore when working with Git repositories",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "TechHelpBD",
   "author": {
     "name": "Kazi Mahbubur Rahman"
