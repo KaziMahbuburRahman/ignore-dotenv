@@ -3,7 +3,10 @@
   "displayName": "Ignore DotENV",
   "description": "Automatically adds .env to .gitignore when working with Git repositories",
   "version": "0.0.1",
-  "publisher": "ignore-dotenv",
+  "publisher": "TechHelpBD",
+  "author": {
+    "name": "Kazi Mahbubur Rahman"
+  },
   "private": false,
   "license": "MIT",
   "repository": {
@@ -16,6 +19,17 @@
   "categories": [
     "Other"
   ],
+  "keywords": [
+    "env",
+    "gitignore",
+    "environment",
+    "security",
+    "git"
+  ],
+  "galleryBanner": {
+    "color": "#C80000",
+    "theme": "dark"
+  },
   "activationEvents": [
     "onStartupFinished"
   ],
