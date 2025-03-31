@@ -1,0 +1,42 @@
+{
+  "name": "ignore-dotenv",
+  "displayName": "Ignore DotENV",
+  "description": "Automatically adds .env to .gitignore when working with Git repositories",
+  "version": "0.0.1",
+  "publisher": "ignore-dotenv",
+  "private": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KaziMahbuburRahman/ignore-dotenv.git"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ignore-dotenv.checkGitignore",
+        "title": "Check .gitignore for .env"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^16.11.7",
+    "eslint": "^8.47.0"
+  }
+}
