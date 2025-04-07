@@ -19,42 +19,64 @@ function activate(context) {
   statusBarItem.text = "$(warning) Remove .env from History";
   statusBarItem.hide();
 
+  // Function to check and update .gitignore
+  const checkAndUpdateGitignore = async () => {
+    try {
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (!workspaceFolders) {
+        return;
+      }
+
+      const rootPath = workspaceFolders[0].uri.fsPath;
+      const gitignorePath = path.join(rootPath, ".gitignore");
+
+      // Check if .gitignore exists
+      if (!fs.existsSync(gitignorePath)) {
+        // Create .gitignore file with .env entry
+        fs.writeFileSync(gitignorePath, ".env\n");
+        vscode.window.showInformationMessage(
+          "Created .gitignore file with .env entry"
+        );
+        return;
+      }
+
+      // Read .gitignore content
+      const content = fs.readFileSync(gitignorePath, "utf8");
+
+      // Check if .env is already in .gitignore
+      if (!content.includes(".env")) {
+        // Append .env to .gitignore
+        fs.appendFileSync(gitignorePath, "\n.env\n");
+        vscode.window.showInformationMessage("Added .env to .gitignore");
+      }
+    } catch (error) {
+      vscode.window.showErrorMessage(
+        `Error updating .gitignore: ${error.message}`
+      );
+    }
+  };
+
+  // Register editor title button
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider("ignore-dotenv-actions", {
+      resolveWebviewView(webviewView) {
+        webviewView.webview.html = `
+          <button onclick="removeFromHistory()">Remove .env from Git History</button>
+          <script>
+            const vscode = acquireVsCodeApi();
+            function removeFromHistory() {
+              vscode.postMessage({ command: 'removeFromHistory' });
+            }
+          </script>
+        `;
+      },
+    })
+  );
+
   // Command to check and update .gitignore
   let checkGitignoreDisposable = vscode.commands.registerCommand(
     "ignore-dotenv.checkGitignore",
-    async () => {
-      try {
-        const workspaceFolders = vscode.workspace.workspaceFolders;
-        if (!workspaceFolders) {
-          return;
-        }
-
-        const rootPath = workspaceFolders[0].uri.fsPath;
-        const gitignorePath = path.join(rootPath, ".gitignore");
-
-        // Check if .gitignore exists
-        if (!fs.existsSync(gitignorePath)) {
-          // Create .gitignore file with .env entry
-          fs.writeFileSync(gitignorePath, ".env\n");
-          vscode.window.showInformationMessage(
-            "Created .gitignore file with .env entry"
-          );
-          return;
-        }
-
-        // Read .gitignore content
-        const content = fs.readFileSync(gitignorePath, "utf8");
-
-        // Check if .env is already in .gitignore
-        if (!content.includes(".env")) {
-          // Append .env to .gitignore
-          fs.appendFileSync(gitignorePath, "\n.env\n");
-          vscode.window.showInformationMessage("Added .env to .gitignore");
-        }
-      } catch (error) {
-        vscode.window.showErrorMessage(`Error: ${error.message}`);
-      }
-    }
+    checkAndUpdateGitignore
   );
 
   // Command to remove .env from Git history
@@ -72,7 +94,7 @@ function activate(context) {
 
         // Show warning message with more details
         const confirm = await vscode.window.showWarningMessage(
-          "This will permanently remove .env files from Git history. This is a destructive operation that will rewrite history. Are you sure you want to continue?",
+          "This will permanently remove .env files from Git history while keeping them in your workspace. This is a destructive operation that will rewrite Git history. Are you sure you want to continue?",
           { modal: true },
           "Yes, Remove from History",
           "No, Cancel"
@@ -91,6 +113,13 @@ function activate(context) {
           },
           async (progress) => {
             progress.report({ increment: 0 });
+
+            // First, backup the .env file
+            const envPath = path.join(rootPath, ".env");
+            let envContent = "";
+            if (fs.existsSync(envPath)) {
+              envContent = fs.readFileSync(envPath, "utf8");
+            }
 
             // Execute Git commands
             const commands = [
@@ -111,12 +140,17 @@ function activate(context) {
               });
             }
 
+            // Restore the .env file if it existed
+            if (envContent) {
+              fs.writeFileSync(envPath, envContent);
+            }
+
             progress.report({ increment: 100 });
           }
         );
 
         vscode.window.showInformationMessage(
-          "Successfully removed .env files from Git history"
+          "Successfully removed .env files from Git history while keeping them in your workspace"
         );
       } catch (error) {
         vscode.window.showErrorMessage(
@@ -170,7 +204,10 @@ function activate(context) {
     statusBarItem
   );
 
-  // Initial check
+  // Initial check for .env in .gitignore
+  checkAndUpdateGitignore();
+
+  // Initial check for .env files in Git
   checkForEnvFiles();
 }
 
