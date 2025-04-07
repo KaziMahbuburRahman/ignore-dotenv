@@ -17,6 +17,9 @@ The extension activates when you open a workspace that contains a Git repository
 2. If `.gitignore` doesn't exist, creates it with `.env` entry
 3. If `.gitignore` exists but doesn't contain `.env`, adds it
 4. Shows a notification when changes are made
+5. If you have already pushed your .env to Github, it shows a button to the bottom right side to remove .env from Github history Permanently. 
+
+Note: It will keep the .env in your local machine don't worry. But if you have already added .env to your .gitignore file this button won't appear.
 
 ## Requirements
 
