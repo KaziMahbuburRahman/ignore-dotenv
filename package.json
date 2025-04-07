@@ -1,8 +1,9 @@
 {
   "name": "ignore-dotenv",
   "displayName": "Ignore DotENV",
-  "description": "Automatically adds .env to .gitignore when working with Git repositories",
-  "version": "0.0.2",
+  "description": "Automatically adds .env to .gitignore when working with Git repositories and provides tools to remove .env from Git history",
+  "version": "0.0.5",
+  "icon": "images/ignore-dotenv.png",
   "publisher": "TechHelpBD",
   "author": {
     "name": "Kazi Mahbubur Rahman"
@@ -39,8 +40,28 @@
       {
         "command": "ignore-dotenv.checkGitignore",
         "title": "Check .gitignore for .env"
+      },
+      {
+        "command": "ignore-dotenv.removeFromHistory",
+        "title": "Remove .env from Git History"
       }
-    ]
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "ignore-dotenv.removeFromHistory",
+          "when": "scmProvider == git && resourceScheme == file && resourceExtname == .env",
+          "group": "navigation"
+        }
+      ],
+      "scm/resourceState/context": [
+        {
+          "command": "ignore-dotenv.removeFromHistory",
+          "when": "scmProvider == git && resourceScheme == file && resourceExtname == .env",
+          "group": "inline"
+        }
+      ]
+    }
   },
   "scripts": {
     "lint": "eslint .",
