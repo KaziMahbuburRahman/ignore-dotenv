@@ -46,6 +46,15 @@
         "title": "Remove .env from Git History"
       }
     ],
+    "views": {
+      "editor/title": [
+        {
+          "id": "ignore-dotenv-actions",
+          "name": "Remove .env from Git History",
+          "when": "resourceExtname == .env"
+        }
+      ]
+    },
     "menus": {
       "scm/title": [
         {
