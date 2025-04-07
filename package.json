@@ -2,7 +2,7 @@
   "name": "ignore-dotenv",
   "displayName": "Ignore DotENV",
   "description": "Automatically adds .env to .gitignore when working with Git repositories and provides tools to remove .env from Git history",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "icon": "images/ignore-dotenv.png",
   "publisher": "TechHelpBD",
   "author": {
