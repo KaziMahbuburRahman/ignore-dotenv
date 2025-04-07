@@ -1,4 +1,4 @@
-# Env Ignore
+# Ignore DotEnv
 
 A VSCode extension that automatically manages `.env` files in `.gitignore` to prevent accidentally committing sensitive environment variables to Git repositories.
 
@@ -35,4 +35,13 @@ None at the moment.
 
 ### 0.0.1
 
-Initial release of Env Ignore
+Initial release of Ignore Env
+
+### 0.0.2 
+
+Added Extension image
+
+### 0.0.6
+
+Added remove .env from history button
+
