@@ -16,8 +16,8 @@ function activate(context) {
   );
   statusBarItem.command = "ignore-dotenv.removeFromHistory";
   statusBarItem.tooltip = "Remove .env from Git History";
-  statusBarItem.text = "$(warning) Remove .env from History";
-  statusBarItem.hide();
+  statusBarItem.text = "$(warning) Remove .env from Github History";
+  statusBarItem.show();
 
   // Function to check and update .gitignore
   const checkAndUpdateGitignore = async () => {
@@ -171,18 +171,8 @@ function activate(context) {
     const repositories = git.repositories;
     if (repositories.length === 0) return;
 
-    const repository = repositories[0];
-    const changes = repository.state.workingTreeChanges;
-
-    const hasEnvFile = changes.some((change) =>
-      change.uri.path.endsWith(".env")
-    );
-
-    if (hasEnvFile) {
-      statusBarItem.show();
-    } else {
-      statusBarItem.hide();
-    }
+    // Always show the status bar item
+    statusBarItem.show();
   };
 
   // Subscribe to Git changes
